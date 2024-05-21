@@ -7,6 +7,7 @@ import { useContext, useEffect, useState } from "react";
 import MediaStream from "../contexts/media-stream";
 import ZoomClient from "../contexts/zoom-client";
 import { TopRightOverlay } from "./TopRightOverlay";
+import { VideoFeed } from "./VideoFeed";
 
 type PeerVideoStateChangeHandler = Parameters<
   typeof event_peer_video_state_change
@@ -51,11 +52,15 @@ export function MainLayout() {
 
   return (
     <div className="fixed inset-0 bg-[#999] flex items-center justify-center">
-      <div className="fixed top-8 right-8 w-[10vw] h-[10vh] space-y-5">
-        {videoFeeds.map((userId) => (
-          <TopRightOverlay key={userId} userId={userId} />
-        ))}
-      </div>
+      {videoFeeds.length > 1 ? (
+        <div className="fixed z-10 top-8 right-8 w-[10vw] h-[10vh] space-y-5">
+          {videoFeeds.slice(1).map((userId) => (
+            <TopRightOverlay key={userId} userId={userId} />
+          ))}
+        </div>
+      ) : null}
+
+      {videoFeeds.length > 0 && <VideoFeed userId={videoFeeds[0]}></VideoFeed>}
     </div>
   );
 }
